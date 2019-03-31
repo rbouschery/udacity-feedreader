@@ -101,14 +101,13 @@ $(function() {
          */
          let container;
          beforeEach(function(done) {
-           container = document.querySelector('.feed');
            loadFeed(0, function() {
              done();
            });
          });
 
          it('feed includes at least one entry', function(done) {
-           expect(container.innerHTML).toContain('entry');
+           expect($('.feed .entry').length).toBeGreaterThan(0);
            done();
          });
 
@@ -127,21 +126,17 @@ $(function() {
 
        beforeEach(function(done) {
          container = document.querySelector('.feed');
+         // load feed twice and store into different variables
          loadFeed(0, function() {
-           done();
+           contentOne = container.innerHTML;
+           loadFeed(2, function() {
+             contentTwo = container.innerHTML;
+             done();
+           })
          });
        });
 
        it('content changes when new feed is loaded', function(done) {
-         contentOne = container.innerHTML;
-
-
-         let loadFeedagain = function(done) {
-           loadFeed(2, function() {
-             done();
-           });
-           contentTwo = container.innerHTML;
-         }
          expect(contentTwo).not.toEqual(contentOne);
          done();
        });
